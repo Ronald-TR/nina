@@ -10,5 +10,7 @@
     "project_prerequisites": "",
     "license_type": "",
     "install_command": "",
-    "test_command": "python -m pytest tests"
+    "test_command": "python -m pytest tests",
+    "cov_output": "",
+    "tests_passing": ""
 }
