@@ -1,0 +1,14 @@
+{
+    "project_name": "readme-py",
+    "project_version": "0.0.1",
+    "project_description": "Crie automaticamente belíssimos README.md",
+    "project_homepage": "",
+    "author_name": "Ronald Rodrigues",
+    "git_username": "Ronald-TR",
+    "repository_url": "",
+    "twitter_username": "",
+    "project_prerequisites": "",
+    "license_type": "",
+    "install_command": "",
+    "test_command": "python -m pytest tests"
+}
