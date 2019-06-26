@@ -62,12 +62,14 @@ def git_repo_question():
 
 def coverage_parser(fields):
     relactory, percent = '', ''
-
     aux = fields['cov_output'].split('\n')
     for i, v in enumerate(aux):
         if 'coverage: platform' in v:
             relactory = aux[i:-1]
         if 'TOTAL' in v:
-            percent = v.replace('\t', ' ').split(' ')[-1]
+            percent = v.replace('\t', ' ').split(' ')[-1].replace('%', '')
     
-    return {'relactory': relactory, 'percent': percent}
+    return {'relactory': relactory, 'percent': int(percent)}
+
+def remove_special_characters(text):
+    return text.replace('-', '_')
