@@ -105,3 +105,6 @@ venv.bak/
 
 # editors
 .vscode/
+
+# personal
+README-autogen.md
