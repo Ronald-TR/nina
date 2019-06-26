@@ -14,6 +14,7 @@ from core.helpers import (
 )
 
 from core.parsers import factory_parser, FactoryParser
+from core.generator import build_readme
 
 if __name__ == "__main__":
     t = Figlet(font='small').renderText('readme_py')
@@ -52,3 +53,7 @@ if __name__ == "__main__":
             # run test command only
             command = subp.run(FIELDS['test_command'].split(' '), stdout=subp.PIPE)
             FIELDS['tests_passing'] = not bool(command.returncode)
+
+    with open('README-autogen.md', 'w+') as _f:
+        _f.write(build_readme(FIELDS))
+    
