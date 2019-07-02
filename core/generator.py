@@ -12,6 +12,7 @@ TEMPLATE  = """
 ## Installation
 
     {install_command}
+
 """
 
 
@@ -50,7 +51,7 @@ def create_badges(fields):
         )
         
     def test_passing():
-        tests = fields.get('test_passing')
+        tests = fields.get('tests_passing')
         if tests == '':
             return ''
         
