@@ -1,19 +1,23 @@
 import os
-import subprocess as subp
+import subprocess as cmd
 
 from pyfiglet import Figlet
-from colorama import Fore
+from colorama import Fore, Style
+import inquirer
 
 from core.helpers import (
-    bool_question, 
-    git_repo_question, 
-    get_env_dir, 
+    bool_question,
+    inquirer_questions,
+    git_repo_question,
+    get_env_dir,
     readmepy_config_file_question,
     coverage_parser,
-    FIELDS
+    suggestions_by,
+    FIELDS,
+    RESERVED_FIELDS
 )
 
-from core.parsers import factory_parser, FactoryParser
+from core.parsers import FactoryParser
 from core.generator import build_readme
 
 if __name__ == "__main__":
@@ -24,17 +28,15 @@ if __name__ == "__main__":
     
     if config_file:
         FIELDS = config_file
+        suggestions = suggestions_by(_dict=FIELDS)
     else:
         # ask the questions
         parser = git_repo_question()
-        if parser:
-            FIELDS['project_name'] = parser.project
-            FIELDS['git_username'] = parser.username
-            FIELDS['repository_url'] = parser.repository
-        for k, v in FIELDS.items():
-            if not v:
-                question = ' '.join(k.split('_')).title()
-                FIELDS[k] = input(f'{question}\n')
+        suggestions = suggestions_by(_dict=None, parser=parser)
+    
+    questions = inquirer_questions(FIELDS, suggestions, RESERVED_FIELDS)
+    FIELDS = inquirer.prompt(questions)
+    FIELDS = {k: v.replace(Fore.LIGHTBLACK_EX, '') for k, v in FIELDS.items()}
 
     if FIELDS['test_command']:
         answer = bool_question('You want to add coverage information? (for Pytest tests only)')
@@ -46,12 +48,12 @@ if __name__ == "__main__":
                     covignore = f'[run]\nomit = {env_dir}/*'
                     _f.write(covignore)
 
-            command = subp.run(FIELDS['test_command'].split(' ') + ['--cov'], stdout=subp.PIPE)
+            command = cmd.run(FIELDS['test_command'].split(' ') + ['--cov'], stdout=cmd.PIPE)
             FIELDS['cov_output'] = command.stdout.decode()
             FIELDS['tests_passing'] = not bool(command.returncode)
         else:
             # run test command only
-            command = subp.run(FIELDS['test_command'].split(' '), stdout=subp.PIPE)
+            command = cmd.run(FIELDS['test_command'].split(' '), stdout=cmd.PIPE)
             FIELDS['tests_passing'] = not bool(command.returncode)
 
     with open('README-autogen.md', 'w+') as _f:
