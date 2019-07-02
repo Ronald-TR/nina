@@ -2,11 +2,19 @@ import os
 import json
 import subprocess
 
-from colorama import Fore
+from colorama import Fore, Style
+import inquirer
 
-from core.parsers import FactoryParser
+from core.parsers import FactoryParser, Parser
 
 CONFIG_FILENAME = 'readmepy-config.json'
+
+
+RESERVED_FIELDS = [
+    "cov_output",
+    "tests_passing"
+]
+
 
 FIELDS = {
     'project_name': '',
@@ -22,6 +30,77 @@ FIELDS = {
     'install_command': '',
     'test_command': ''
 }
+
+
+def inquirer_questions(fields, suggestions, skip=list()):
+    questions = []
+    for k, v in fields.items():
+        if k in skip:
+            continue
+        
+        if k == "license_type":
+            questions += [
+                inquirer.List(k,
+                message="What's the License Type?",
+                choices=[
+                    "MIT",
+                    "GNU AGPLv3",
+                    "GNU GPLv3",
+                    "GNU LGPLv3",
+                    "Unlicense",
+                    "Apache 2.0",
+                    "Mozilla Public License 2.0",
+                    ""
+                    ]
+                )
+            ]
+            continue
+
+        msg = "What's the " + ' '.join(k.split('_')).title() + '?'
+        sg = suggestions.get(k) or ''
+        questions += [
+            inquirer.Text(name=k,
+            message=Style.BRIGHT + Fore.YELLOW +msg,
+            default=Fore.LIGHTBLACK_EX + sg),
+        ]
+    
+    return questions
+
+
+def suggestions_by(_dict, parser=None):
+    if parser:
+        sg = parser.__dict__.copy()
+    else:
+        sg = _dict.copy()
+    
+    repository_url = sg.get("repository_url") or ''
+    project_homepage = sg.get("project_homepage") or ''
+
+    if parser:
+        repository_url = f"https://{parser.gtype}.com/" \
+            f"{parser.git_username}/{parser.project_name}"
+        
+        project_homepage = f"https://{parser.project_name}.{parser.gtype}.io/"
+ 
+    sg["repository_url"] = repository_url 
+    sg["project_homepage"] = project_homepage
+    sg["project_description"] = "My Awesome project!"
+    sg["project_version"] = "v0.0.1"
+
+    return sg
+
+
+def str_question(question, suggestion, key):
+    sg = suggestion.get(key) or ''
+    answer = input(
+            f'{Fore.LIGHTWHITE_EX}{question} {Fore.LIGHTBLACK_EX}E.g.: {sg}' \
+            f'{Fore.LIGHTWHITE_EX}\n'
+        ).lower()
+    
+    if not answer and sg:
+        answer = sg
+
+    return answer
 
 
 def bool_question(question):
@@ -55,8 +134,7 @@ def git_repo_question():
         msg = 'Parece que você tem um repositório Git. ' \
          'deseja usa-lo para responder algumas perguntas?'
         if bool_question(msg):
-            repo_url = git.stdout.decode().split('\n')[0]
-            parser = FactoryParser(repo_url.split('\t'))
+            parser = FactoryParser()
     return parser
 
 
