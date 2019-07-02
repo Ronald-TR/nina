@@ -1,4 +1,4 @@
-from core.helpers import coverage_parser, remove_special_characters
+from core.helpers import coverage_parser, fmt
 
 TEMPLATE  = """
 # {project_name}
@@ -35,7 +35,7 @@ def create_badge(md_tag, name, value, color):
 def create_badges(fields):
     def version():
         return create_badge('version',
-            remove_special_characters(fields['project_name']),
+            fmt(fields['project_name']),
             fields['project_version'],
             'brightgreen'
             )
@@ -69,11 +69,20 @@ def create_badges(fields):
         res = 'passing' if tests else 'failing'
         color = 'green' if tests else 'red'
         return create_badge('tests', 'tests', res, color)
+    
+    
+    def license():
+        license = fmt(fields.get("license_type"))
+        if license:
+            return create_badge("license", "license", license, "green")
+        return ''
+
 
     return [
         version(),
         coverage(),
-        test_passing()
+        test_passing(),
+        license()
     ]
 
 def build_readme(fields):
