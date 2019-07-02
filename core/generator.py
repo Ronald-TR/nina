@@ -63,7 +63,7 @@ def create_badges(fields):
         
     def test_passing():
         tests = fields.get('tests_passing')
-        if tests == '':
+        if tests == None:
             return ''
         
         res = 'passing' if tests else 'failing'
