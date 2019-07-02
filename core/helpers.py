@@ -22,6 +22,7 @@ FIELDS = {
     'project_description': '',
     'project_homepage': '',
     'author_name': '',
+    'author_email': '',
     'git_username': '',
     'repository_url': '',
     'twitter_username': '',
@@ -151,6 +152,7 @@ def coverage_parser(fields):
     return {'relactory': relactory, 'percent': int(percent)}
 
 def fmt(text):
+    """used specially for badge fields"""
     special = ['-', ' ']
     for i in special:
         text = text.replace(i, '_')

@@ -10,7 +10,7 @@ class Parser:
     def __init__(self, configs):
         self.__configs = configs
         self.author_name = ''
-        self.email = ''
+        self.author_email = ''
         self.gtype = ''
         self.git_username = ''
         self.remote = 'origin'
@@ -31,7 +31,7 @@ class Parser:
             if 'user.name' in item:
                 self.author_name = item.replace('user.name=', '')
             elif 'user.email' in item:
-                self.email = item.replace('user.email=', '')
+                self.author_email = item.replace('user.email=', '')
             elif 'remote.origin.url' in item:
                 self.repository_url = item.replace('remote.origin.url=', '')
         
