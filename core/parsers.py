@@ -1,64 +1,63 @@
+import re
+import subprocess as cmd
+
+
 class Parser:
-    def __init__(self, gtype, repo_url):
-        self.gtype = gtype
-        self.username = ''
-        self.project = ''
-        self.remote = repo_url[0]
-        self.repository = repo_url[-1]
-        self.is_ssh = f'git@{self.gtype}.com' in self.repository
-        self.is_https = f'https://{self.gtype}.com' in self.repository
+    def __init__(self, parser):
+        if isinstance(parser, Parser):
+            self = parser
 
+    def __init__(self, configs):
+        self.__configs = configs
+        self.author_name = ''
+        self.email = ''
+        self.gtype = ''
+        self.git_username = ''
+        self.remote = 'origin'
+        self.repository_url = ''
+        self.project_name = ''
+        self.is_ssh = None
+        self.is_https = None
+        self.__extract_config_data()
 
-    def get_data(self):
-        _split_arg = ''
-
-        if self.is_ssh:
-            _split_arg = f'git@{self.gtype}.com:'
-        elif self.is_https:
-            _split_arg = f'https://{self.gtype}.com/'
-        else:
-            return
-
-        aux = self.repository.split(_split_arg)[-1]
-        aux = aux.split('/')
-
-        self.username = aux[0]
-        self.project = aux[-1].split('.git')[0]
-
-
-class GitlabParser(Parser):
-    def __init__(self, repo_url):
-        super(GitlabParser, self).__init__('gitlab', repo_url)
-        self.get_data()
+    
+    def __extract_config_data(self):
+        for item in self.__configs:
+            item = item.strip()
+            
+            if not item:
+                continue
+            
+            if 'user.name' in item:
+                self.author_name = item.replace('user.name=', '')
+            elif 'user.email' in item:
+                self.email = item.replace('user.email=', '')
+            elif 'remote.origin.url' in item:
+                self.repository_url = item.replace('remote.origin.url=', '')
         
+        r = re.compile(r'^git@').match(self.repository_url)
+        self.is_ssh = True if r else False
+        
+        r = re.compile(r'^https://').match(self.repository_url)
+        self.is_https = True if r else False 
 
-class GithubParser(Parser):
-    def __init__(self, repo_url):
-        super(GithubParser, self).__init__('github', repo_url)
-        self.get_data()
-
-
-def factory_parser(repo_url):
-    """
-    repo_url has the following pattern:
-        remote_name\trepository_url
-    """
-    repo_url = repo_url.split('\t')
-    if 'gitlab' in repo_url[1]:
-        return GitlabParser(repo_url)
-    elif 'github' in repo_url[1]:
-        return GithubParser(repo_url)
+        if self.is_ssh: starts_with = 'git@'
+        if self.is_https: starts_with = 'https:\/\/'
+        
+        _regex = starts_with + '(.*).com.(.*)\/(.*)\.git'
+        r = re.compile(_regex).match(self.repository_url)
+        if r:
+            self.gtype = r.groups()[0]
+            self.git_username = r.groups()[1]
+            self.project_name = r.groups()[2]
 
 
 class FactoryParser:
-    def __new__(cls, repo_url, *args, **kwargs):
-        """
-        repo_url is an array with two positions
-        0 - remote name
-        1 - remote url
-        """
-        repo_url[1] = repo_url[1].split('.git', 1)[0] + '.git'
-        if 'gitlab' in repo_url[1]:
-            return GitlabParser(repo_url)
-        if 'github' in repo_url[1]:
-            return GithubParser(repo_url)
+    def __new__(cls, *args, **kwargs):
+        git = cmd.run(['git', 'config', '-l'], stdout=cmd.PIPE)
+        if git.returncode == 0:
+            configs = git.stdout.decode().split('\n')
+            return Parser(configs)
+        return None
+
+
