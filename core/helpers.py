@@ -75,7 +75,8 @@ def suggestions_by(_dict, parser=None):
     
     repository_url = sg.get("repository_url") or ''
     project_homepage = sg.get("project_homepage") or ''
-
+    project_description = sg.get("project_homepage") or 'My Awesome project!'
+    
     if parser:
         repository_url = f"https://{parser.gtype}.com/" \
             f"{parser.git_username}/{parser.project_name}"
@@ -84,7 +85,7 @@ def suggestions_by(_dict, parser=None):
  
     sg["repository_url"] = repository_url 
     sg["project_homepage"] = project_homepage
-    sg["project_description"] = "My Awesome project!"
+    sg["project_description"] = project_description
     sg["project_version"] = "v0.0.1"
 
     return sg
