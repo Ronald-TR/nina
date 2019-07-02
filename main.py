@@ -30,10 +30,10 @@ if __name__ == "__main__":
         FIELDS = config_file
         suggestions = suggestions_by(_dict=FIELDS)
     else:
-        # ask the questions
         parser = git_repo_question()
         suggestions = suggestions_by(_dict=None, parser=parser)
     
+    # ask the questions
     questions = inquirer_questions(FIELDS, suggestions, RESERVED_FIELDS)
     FIELDS = inquirer.prompt(questions)
     FIELDS = {k: v.replace(Fore.LIGHTBLACK_EX, '') for k, v in FIELDS.items()}
