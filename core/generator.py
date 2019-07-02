@@ -12,7 +12,18 @@ TEMPLATE  = """
 ## Installation
 
     {install_command}
+## License
+<details>
+    <summary>{license_type}</summary>
+    lorem ipsum
+</details>
 
+## Author
+Learn more about: {author_name}
+
+Email: {author_email}
+
+[Github :octocat:](https://github.com/{git_username})
 """
 
 
@@ -73,7 +84,11 @@ def build_readme(fields):
         'badges': badges,
         'project_homepage': fields['project_homepage'],
         'project_description': fields['project_description'],
-        'install_command': fields['install_command']
+        'install_command': fields['install_command'],
+        'license_type': fields['license_type'],
+        'author_name': fields['author_name'],
+        'author_email': fields['author_email'],
+        'git_username': fields['git_username']
     })
 
     return template
