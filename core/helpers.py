@@ -75,7 +75,7 @@ def suggestions_by(_dict, parser=None):
     
     repository_url = sg.get("repository_url") or ''
     project_homepage = sg.get("project_homepage") or ''
-    project_description = sg.get("project_homepage") or 'My Awesome project!'
+    project_description = sg.get("project_description") or 'My Awesome project!'
     
     if parser:
         repository_url = f"https://{parser.gtype}.com/" \
@@ -150,5 +150,8 @@ def coverage_parser(fields):
     
     return {'relactory': relactory, 'percent': int(percent)}
 
-def remove_special_characters(text):
-    return text.replace('-', '_')
+def fmt(text):
+    special = ['-', ' ']
+    for i in special:
+        text = text.replace(i, '_')
+    return text
