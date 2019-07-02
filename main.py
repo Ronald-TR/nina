@@ -25,17 +25,19 @@ if __name__ == "__main__":
     print(f'{Fore.LIGHTWHITE_EX}{t}')
     
     config_file = readmepy_config_file_question()
-    
+    suggestions  = {}
     if config_file:
         FIELDS = config_file
         suggestions = suggestions_by(_dict=FIELDS)
     else:
         parser = git_repo_question()
-        suggestions = suggestions_by(_dict=None, parser=parser)
+        if parser:
+            suggestions = suggestions_by(_dict=None, parser=parser)
     
     # ask the questions
     questions = inquirer_questions(FIELDS, suggestions, RESERVED_FIELDS)
     FIELDS = inquirer.prompt(questions)
+    # clean color in answers
     FIELDS = {k: v.replace(Fore.LIGHTBLACK_EX, '') for k, v in FIELDS.items()}
 
     if FIELDS['test_command']:
