@@ -1,4 +1,4 @@
-from core.helpers import coverage_parser, fmt
+from automail.core.helpers import coverage_parser, fmt
 
 TEMPLATE = """
 # {project_name}

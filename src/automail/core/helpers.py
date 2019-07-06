@@ -5,29 +5,31 @@ import subprocess
 from colorama import Fore, Style
 import inquirer
 
-from core.parsers import FactoryParser
+from automail.core.parsers import FactoryParser
 
 CONFIG_FILENAME = "readmepy-config.json"
 
 
-RESERVED_FIELDS = ["cov_output", "tests_passing"]
+def template_reserved_fields():
+    return ["cov_output", "tests_passing"]
 
 
-FIELDS = {
-    "project_name": "",
-    "project_version": "",
-    "project_description": "",
-    "project_homepage": "",
-    "author_name": "",
-    "author_email": "",
-    "git_username": "",
-    "repository_url": "",
-    "twitter_username": "",
-    "project_prerequisites": "",
-    "license_type": "",
-    "install_command": "",
-    "test_command": "",
-}
+def template_fields():
+    return {
+        "project_name": "",
+        "project_version": "",
+        "project_description": "",
+        "project_homepage": "",
+        "author_name": "",
+        "author_email": "",
+        "git_username": "",
+        "repository_url": "",
+        "twitter_username": "",
+        "project_prerequisites": "",
+        "license_type": "",
+        "install_command": "",
+        "test_command": "",
+    }
 
 
 def inquirer_questions(fields, suggestions, skip=list()):
@@ -103,6 +105,8 @@ def bool_question(question):
         )
     ]
     answer = inquirer.prompt(question)
+    if not answer:
+        raise KeyboardInterrupt
 
     return True if answer.get("question") == "YES" else False
 

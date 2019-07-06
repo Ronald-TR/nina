@@ -12,21 +12,27 @@ from core.helpers import (
     get_env_dir,
     readmepy_config_file_question,
     suggestions_by,
-    FIELDS,
-    RESERVED_FIELDS,
+    template_fields,
+    template_reserved_fields,
 )
 
 from core.generators._readme import build_readme
 from core.generators._setup import build_setup
 
-if __name__ == "__main__":
+
+def main():
+    FIELDS = template_fields()
+    RESERVED_FIELDS = template_reserved_fields()
+
     t = Figlet(font="small").renderText("readme_py")
     print(f"{Fore.LIGHTWHITE_EX}{t}")
 
     config_file = readmepy_config_file_question()
     suggestions = {}
     if config_file:
-        FIELDS = config_file
+        for i in config_file:
+            FIELDS[i] = config_file[i]
+
         suggestions = suggestions_by(_dict=config_file)
     else:
         parser = git_repo_question()
@@ -72,3 +78,10 @@ if __name__ == "__main__":
     if gen_setup:
         with open("setup-autogen.py", "w+") as _f:
             _f.write(build_setup(FIELDS))
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("Bye!")
