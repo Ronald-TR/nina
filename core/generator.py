@@ -57,7 +57,7 @@ def create_badges(fields):
         return create_badge(
             'coverage',
             'coverage',
-            str(cov['percent']) + '%',
+            str(cov['percent']) + '%25',
             color_cov
         )
         
