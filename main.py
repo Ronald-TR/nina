@@ -14,18 +14,18 @@ from core.helpers import (
     coverage_parser,
     suggestions_by,
     FIELDS,
-    RESERVED_FIELDS
+    RESERVED_FIELDS,
 )
 
 from core.parsers import FactoryParser
 from core.generator import build_readme
 
 if __name__ == "__main__":
-    t = Figlet(font='small').renderText('readme_py')
-    print(f'{Fore.LIGHTWHITE_EX}{t}')
-    
+    t = Figlet(font="small").renderText("readme_py")
+    print(f"{Fore.LIGHTWHITE_EX}{t}")
+
     config_file = readmepy_config_file_question()
-    suggestions  = {}
+    suggestions = {}
     if config_file:
         FIELDS = config_file
         suggestions = suggestions_by(_dict=FIELDS)
@@ -33,31 +33,34 @@ if __name__ == "__main__":
         parser = git_repo_question()
         if parser:
             suggestions = suggestions_by(_dict=None, parser=parser)
-    
+
     # ask the questions
     questions = inquirer_questions(FIELDS, suggestions, RESERVED_FIELDS)
     FIELDS = inquirer.prompt(questions)
     # clean color in answers
-    FIELDS = {k: v.replace(Fore.LIGHTBLACK_EX, '') for k, v in FIELDS.items()}
+    FIELDS = {k: v.replace(Fore.LIGHTBLACK_EX, "") for k, v in FIELDS.items()}
 
-    if FIELDS['test_command']:
-        answer = bool_question('You want to add coverage information? (for Pytest tests only)')
+    if FIELDS["test_command"]:
+        answer = bool_question(
+            "You want to add coverage information? (for Pytest tests only)"
+        )
         if answer:
             # run tests with coverage
             env_dir = get_env_dir()
-            if not os.path.isfile('.coveragerc'):
-                with open('.coveragerc', 'a+') as _f:
-                    covignore = f'[run]\nomit = {env_dir}/*'
+            if not os.path.isfile(".coveragerc"):
+                with open(".coveragerc", "a+") as _f:
+                    covignore = f"[run]\nomit = {env_dir}/*"
                     _f.write(covignore)
 
-            command = cmd.run(FIELDS['test_command'].split(' ') + ['--cov'], stdout=cmd.PIPE)
-            FIELDS['cov_output'] = command.stdout.decode()
-            FIELDS['tests_passing'] = not bool(command.returncode)
+            command = cmd.run(
+                FIELDS["test_command"].split(" ") + ["--cov"], stdout=cmd.PIPE
+            )
+            FIELDS["cov_output"] = command.stdout.decode()
+            FIELDS["tests_passing"] = not bool(command.returncode)
         else:
             # run test command only
-            command = cmd.run(FIELDS['test_command'].split(' '), stdout=cmd.PIPE)
-            FIELDS['tests_passing'] = not bool(command.returncode)
+            command = cmd.run(FIELDS["test_command"].split(" "), stdout=cmd.PIPE)
+            FIELDS["tests_passing"] = not bool(command.returncode)
 
-    with open('README-autogen.md', 'w+') as _f:
+    with open("README-autogen.md", "w+") as _f:
         _f.write(build_readme(FIELDS))
-    
