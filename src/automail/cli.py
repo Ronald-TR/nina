@@ -5,7 +5,7 @@ from pyfiglet import Figlet
 from colorama import Fore
 import inquirer
 
-from core.helpers import (
+from automail.core.helpers import (
     bool_question,
     inquirer_questions,
     git_repo_question,
@@ -16,8 +16,8 @@ from core.helpers import (
     template_reserved_fields,
 )
 
-from core.generators._readme import build_readme
-from core.generators._setup import build_setup
+from automail.core.generators._readme import build_readme
+from automail.core.generators._setup import build_setup
 
 
 def main():
