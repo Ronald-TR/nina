@@ -137,7 +137,7 @@ def git_repo_question():
 
 
 def coverage_parser(fields):
-    relactory, percent = "", ""
+    relactory, percent = "", "0"
     aux = fields["cov_output"].split("\n")
     for i, v in enumerate(aux):
         if "coverage: platform" in v:
