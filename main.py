@@ -2,7 +2,7 @@ import os
 import subprocess as cmd
 
 from pyfiglet import Figlet
-from colorama import Fore, Style
+from colorama import Fore
 import inquirer
 
 from core.helpers import (
@@ -11,14 +11,12 @@ from core.helpers import (
     git_repo_question,
     get_env_dir,
     readmepy_config_file_question,
-    coverage_parser,
     suggestions_by,
     FIELDS,
     RESERVED_FIELDS,
 )
 
-from core.parsers import FactoryParser
-from core.generator import build_readme
+from core.generators._readme import build_readme
 
 if __name__ == "__main__":
     t = Figlet(font="small").renderText("readme_py")
@@ -28,7 +26,7 @@ if __name__ == "__main__":
     suggestions = {}
     if config_file:
         FIELDS = config_file
-        suggestions = suggestions_by(_dict=FIELDS)
+        suggestions = suggestions_by(_dict=config_file)
     else:
         parser = git_repo_question()
         if parser:
@@ -59,7 +57,9 @@ if __name__ == "__main__":
             FIELDS["tests_passing"] = not bool(command.returncode)
         else:
             # run test command only
-            command = cmd.run(FIELDS["test_command"].split(" "), stdout=cmd.PIPE)
+            command = cmd.run(
+                FIELDS["test_command"].split(" "),
+                stdout=cmd.PIPE)
             FIELDS["tests_passing"] = not bool(command.returncode)
 
     with open("README-autogen.md", "w+") as _f:
