@@ -101,5 +101,3 @@ def build_readme(fields):
     })
 
     return template
-
-    
