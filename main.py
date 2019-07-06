@@ -17,6 +17,7 @@ from core.helpers import (
 )
 
 from core.generators._readme import build_readme
+from core.generators._setup import build_setup
 
 if __name__ == "__main__":
     t = Figlet(font="small").renderText("readme_py")
@@ -64,3 +65,10 @@ if __name__ == "__main__":
 
     with open("README-autogen.md", "w+") as _f:
         _f.write(build_readme(FIELDS))
+
+    question = "Do you want to generate setup.py based on your answers?"
+    gen_setup = bool_question(question)
+
+    if gen_setup:
+        with open("setup-autogen.py", "w+") as _f:
+            _f.write(build_setup(FIELDS))
