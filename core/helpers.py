@@ -41,17 +41,17 @@ def inquirer_questions(fields, suggestions, skip=list()):
         
         if k == "license_type":
             questions += [
-                inquirer.List(k,
-                message="What's the License Type?",
-                choices=[
-                    "MIT",
-                    "GNU AGPLv3",
-                    "GNU GPLv3",
-                    "GNU LGPLv3",
-                    "Unlicense",
-                    "Apache 2.0",
-                    "Mozilla Public License 2.0",
-                    ""
+                inquirer.List(
+                    k,
+                    message="What's the License Type?",
+                    choices=[
+                        "MIT",
+                        "GNU AGPLv3",
+                        "GNU GPLv3",
+                        "GNU LGPLv3",
+                        "Unlicense",
+                        "Apache 2.0",
+                        "Mozilla Public License 2.0"
                     ]
                 )
             ]
@@ -60,9 +60,10 @@ def inquirer_questions(fields, suggestions, skip=list()):
         msg = "What's the " + ' '.join(k.split('_')).title() + '?'
         sg = suggestions.get(k) or ''
         questions += [
-            inquirer.Text(name=k,
-            message=Style.BRIGHT + Fore.YELLOW +msg,
-            default=Fore.LIGHTBLACK_EX + sg),
+            inquirer.Text(
+                name=k,
+                message=Style.BRIGHT + Fore.YELLOW + msg,
+                default=Fore.LIGHTBLACK_EX + sg),
         ]
     
     return questions
@@ -73,15 +74,15 @@ def suggestions_by(_dict, parser=None):
         sg = parser.__dict__.copy()
     else:
         sg = _dict.copy()
-    
+
     repository_url = sg.get("repository_url") or ''
     project_homepage = sg.get("project_homepage") or ''
     project_description = sg.get("project_description") or 'My Awesome project!'
-    
+
     if parser:
         repository_url = f"https://{parser.gtype}.com/" \
             f"{parser.git_username}/{parser.project_name}"
-        
+
         project_homepage = f"https://{parser.project_name}.{parser.gtype}.io/"
  
     sg["repository_url"] = repository_url 
@@ -92,27 +93,20 @@ def suggestions_by(_dict, parser=None):
     return sg
 
 
-def str_question(question, suggestion, key):
-    sg = suggestion.get(key) or ''
-    answer = input(
-            f'{Fore.LIGHTWHITE_EX}{question} {Fore.LIGHTBLACK_EX}E.g.: {sg}' \
-            f'{Fore.LIGHTWHITE_EX}\n'
-        ).lower()
-    
-    if not answer and sg:
-        answer = sg
-
-    return answer
-
-
 def bool_question(question):
-    _help = ''
-    while True:
-        answer = input(f'{Fore.LIGHTWHITE_EX}{question} (Y/N) {Fore.LIGHTBLACK_EX}{_help}\n').lower()
-        if answer in 'yn':
-            break;
-        _help = ' - Just Y or N\n'
-    return True if answer == 'y' else False
+    question = [
+        inquirer.List(
+            "question",
+            message=f"{Fore.LIGHTWHITE_EX}{question}",
+            choices=[
+                "YES",
+                "NO"
+            ]
+        )
+    ]
+    answer = inquirer.prompt(question)
+
+    return True if answer.get("question") == 'YES' else False
 
 
 def readmepy_config_file_question():
@@ -150,6 +144,7 @@ def coverage_parser(fields):
             percent = v.replace('\t', ' ').split(' ')[-1].replace('%', '')
     
     return {'relactory': relactory, 'percent': int(percent)}
+
 
 def fmt(text):
     """used specially for badge fields"""
