@@ -107,4 +107,5 @@ venv.bak/
 .vscode/
 
 # personal
-# README-autogen.md
+README-autogen.md
+setup-autogen.py
