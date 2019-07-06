@@ -15,6 +15,11 @@ setuptools.setup(
     packages=setuptools.find_packages("src"),
     package_dir={"": "src"},
     include_package_data=True,
+    install_requires=[
+        "colorama>=0.4.1",
+        "inquirer>=2.6.3",
+        "pyfiglet>=0.8.post1"
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
