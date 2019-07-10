@@ -11,3 +11,6 @@ upload-no-cache:
 	rm -rf build dist
 	make build
 	python -m twine upload dist/*
+
+tests:
+	python -m pytest tests
