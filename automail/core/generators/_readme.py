@@ -12,10 +12,16 @@ TEMPLATE = """
 ## Installation
 
     {install_command}
-## License
+
+## Test Command
+To test the application, run the following command:
+
+    {test_command}
+
+## [License](LICENSE.md)
 <details>
     <summary>{license_type}</summary>
-    lorem ipsum
+{license_body}
 </details>
 
 ## Author
@@ -24,6 +30,7 @@ Learn more about: {author_name}
 Email: {author_email}
 
 [Github :octocat:](https://github.com/{git_username})
+[Twitter](https://twitter.com/{twitter_username})
 """
 
 
@@ -76,7 +83,7 @@ def create_badges(fields):
     return [version(), coverage(), test_passing(), license()]
 
 
-def build_readme(fields):
+def build_readme(fields, _license):
     badges = " ".join(create_badges(fields))
 
     template = TEMPLATE.format(
@@ -86,10 +93,13 @@ def build_readme(fields):
             "project_homepage": fields["project_homepage"],
             "project_description": fields["project_description"],
             "install_command": fields["install_command"],
+            "test_command": fields["test_command"],
             "license_type": fields["license_type"],
+            "license_body": _license,
             "author_name": fields["author_name"],
             "author_email": fields["author_email"],
             "git_username": fields["git_username"],
+            "twitter_username": fields["twitter_username"],
         }
     )
     return template
