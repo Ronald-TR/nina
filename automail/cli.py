@@ -14,6 +14,7 @@ from automail.core.helpers import (
     suggestions_by,
     template_fields,
     template_reserved_fields,
+    get_license
 )
 
 from automail.core.generators._readme import build_readme
@@ -24,7 +25,7 @@ def main():
     FIELDS = template_fields()
     RESERVED_FIELDS = template_reserved_fields()
 
-    t = Figlet(font="small").renderText("readme_py")
+    t = Figlet(font="big").renderText("nina .md\n")
     print(f"{Fore.LIGHTWHITE_EX}{t}")
 
     config_file = automail_config_file_question()
@@ -69,6 +70,8 @@ def main():
                 stdout=cmd.PIPE)
             FIELDS["tests_passing"] = not bool(command.returncode)
 
+    # generating files
+    # readme
     with open("README-autogen.md", "w+") as _f:
         _f.write(build_readme(FIELDS))
         print("README-autogen.md generated! Please revise them! :D")
@@ -76,12 +79,23 @@ def main():
     question = "Do you want to generate setup.py based on your answers?"
     gen_setup = bool_question(question)
 
+    # setup
     if gen_setup:
         with open("setup-autogen.py", "w+") as _f:
             _f.write(build_setup(FIELDS))
             message = f"{Style.BRIGHT}{Fore.BLACK}setup-autogen.py generated!"\
                 " Please revise them! :D"
             print(message)
+
+    # license
+    with open("LICENSE-autogen.md", "w+") as _f:
+        try:
+            _f.write(get_license(FIELDS))
+            message = f"{Style.BRIGHT}{Fore.BLACK}LICENSE-autogen.md"\
+                "generated! Please revise them! :D"
+        except:
+            message = "An error occurred when generating LICENSE.md"
+        print(message)
 
 
 def _cli():

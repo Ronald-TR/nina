@@ -1,13 +1,39 @@
 import os
 import json
 import subprocess
+import requests
+from datetime import datetime
 
 from colorama import Fore, Style
 import inquirer
 
 from automail.core.parsers import FactoryParser
 
-CONFIG_FILENAME = "readmepy-config.json"
+CONFIG_FILENAME = "nina-config.json"
+LICENSES = {
+    "MIT": "mit",
+    "GNU AGPLv3": "agpl-3.0",
+    "GNU GPLv3": "gpl-3.0",
+    "GNU LGPLv3": "lgpl-3.0",
+    "Unlicense": "unlicense",
+    "Apache 2.0": "apache-2.0",
+    "Mozilla Public License 2.0": "mpl-2.0"
+}
+
+
+def get_license(fields):
+    breakpoint()
+    license_type = LICENSES.get(fields["license_type"])
+    URL = "https://api.github.com/licenses/"
+    _license = ""
+
+    if license_type:
+        r = requests.get(URL + license_type)
+        _license = r.json().get("body")
+        _license = _license.replace("[year]", str(datetime.now().year))
+        _license = _license.replace("[fullname]", fields.get("author_name"))
+
+    return _license
 
 
 def template_reserved_fields():
