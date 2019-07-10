@@ -71,9 +71,20 @@ def main():
             FIELDS["tests_passing"] = not bool(command.returncode)
 
     # generating files
+    # license
+    with open("LICENSE-autogen.md", "w+") as _f:
+        try:
+            _license = get_license(FIELDS)
+            _f.write(_license)
+            message = f"{Style.BRIGHT}{Fore.BLACK}LICENSE-autogen.md"\
+                "generated! Please revise them! :D"
+        except BaseException:
+            message = "An error occurred when generating LICENSE.md"
+        print(message)
+
     # readme
     with open("README-autogen.md", "w+") as _f:
-        _f.write(build_readme(FIELDS))
+        _f.write(build_readme(FIELDS, _license))
         print("README-autogen.md generated! Please revise them! :D")
 
     question = "Do you want to generate setup.py based on your answers?"
@@ -86,16 +97,6 @@ def main():
             message = f"{Style.BRIGHT}{Fore.BLACK}setup-autogen.py generated!"\
                 " Please revise them! :D"
             print(message)
-
-    # license
-    with open("LICENSE-autogen.md", "w+") as _f:
-        try:
-            _f.write(get_license(FIELDS))
-            message = f"{Style.BRIGHT}{Fore.BLACK}LICENSE-autogen.md"\
-                "generated! Please revise them! :D"
-        except:
-            message = "An error occurred when generating LICENSE.md"
-        print(message)
 
 
 def _cli():

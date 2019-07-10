@@ -22,7 +22,6 @@ LICENSES = {
 
 
 def get_license(fields):
-    breakpoint()
     license_type = LICENSES.get(fields["license_type"])
     URL = "https://api.github.com/licenses/"
     _license = ""
