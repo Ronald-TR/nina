@@ -111,11 +111,11 @@ def bool_question(question):
     return True if answer.get("question") == "YES" else False
 
 
-def readmepy_config_file_question():
+def automail_config_file_question():
     if os.path.isfile(CONFIG_FILENAME):
         msg = (
-            "Há um arquivo de configuração na raiz,"
-            "deseja utiliza-lo para preencher as perguntas?"
+            "Have a configuration file in the root,"
+            "do you want to use them to fill the questions?"
         )
         if bool_question(msg):
             with open(CONFIG_FILENAME, "r") as _f:
