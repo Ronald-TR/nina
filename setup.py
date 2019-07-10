@@ -12,9 +12,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="github.com/teste",
-    packages=setuptools.find_packages("src"),
-    package_dir={"": "src"},
-    include_package_data=True,
+    packages=setuptools.find_packages("."),
     install_requires=[
         "colorama>=0.4.1",
         "inquirer>=2.6.3",
@@ -26,6 +24,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     entry_points={
-        "console_scripts": ["create-readme = automail.cli:main"]
+        "console_scripts": ["create-readme = automail.cli:_cli"]
     }
 )
