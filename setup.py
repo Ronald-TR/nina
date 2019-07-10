@@ -4,14 +4,14 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="automail",
+    name="nina",
     version="v0.0.1",
     author="Ronald Rodrigues",
-    author_email="ronald@teste.com",
+    author_email="ronald-farias@outlook.com",
     description="Generate README.md and setup.py quickly",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="github.com/teste",
+    url="https://github.com/Ronald-TR/nina",
     packages=setuptools.find_packages("."),
     install_requires=[
         "colorama>=0.4.1",
