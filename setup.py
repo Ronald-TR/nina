@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="nina",
-    version="v0.0.1",
+    version="v0.0.2",
     author="Ronald Rodrigues",
     author_email="ronald-farias@outlook.com",
     description="Generate README.md and setup.py quickly",
@@ -16,7 +16,8 @@ setuptools.setup(
     install_requires=[
         "colorama>=0.4.1",
         "inquirer>=2.6.3",
-        "pyfiglet>=0.8.post1"
+        "pyfiglet>=0.8.post1",
+        "requests"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
