@@ -109,9 +109,9 @@ def main():
             message = f"{Style.BRIGHT}{Fore.BLACK}setup-autogen.py generated!"\
                 " Please revise them! :D"
             print(message)
-    
+
     with open("nina-config.json", "w+") as _f:
-        _f.write(json.dumps(FIELDS))
+        _f.write(json.dumps(FIELDS, indent=2))
         message = f"{Style.BRIGHT}{Fore.BLACK}nina-config.json generated!"\
             " Your previous answers are been preserved."
         print(message)
