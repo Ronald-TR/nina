@@ -51,7 +51,10 @@ class Parser:
 
 class FactoryParser:
     def __new__(cls, *args, **kwargs):
-        git = cmd.run(["git", "config", "-l"], stdout=cmd.PIPE)
+        git = cmd.run(
+            ["git", "config", "-l"],
+            stdout=cmd.DEVNULL,
+            stderr=cmd.DEVNULL)
         if git.returncode == 0:
             configs = git.stdout.decode().split("\n")
             return Parser(configs)

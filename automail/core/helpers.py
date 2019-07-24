@@ -153,7 +153,10 @@ def get_env_dir():
 
 
 def git_repo_question():
-    git = subprocess.run(["git", "remote", "-v"], stdout=subprocess.PIPE)
+    git = subprocess.run(
+        ["git", "remote", "-v"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL)
     parser = None
     if git.returncode == 0:
         msg = (
