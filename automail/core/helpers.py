@@ -57,9 +57,9 @@ def template_fields():
     }
 
 
-def inquirer_questions(fields, suggestions, skip=list()):
+def inquirer_questions(fields, suggestions, skip=list()[:]):
     questions = []
-    for k, v in fields.items():
+    for k, _ in fields.items():
         if k in skip:
             continue
 
@@ -149,7 +149,7 @@ def automail_config_file_question():
 
 
 def get_env_dir():
-    return os.path.basename(os.getenv("VIRTUAL_ENV"))
+    return os.path.basename(os.getenv("VIRTUAL_ENV") or "")
 
 
 def git_repo_question():
@@ -160,8 +160,8 @@ def git_repo_question():
     parser = None
     if git.returncode == 0:
         msg = (
-            "Parece que você tem um repositório Git. "
-            "deseja usa-lo para responder algumas perguntas?"
+            "Seems that you have a GIT repository. "
+            "Do you want to use it to answer some questions?"
         )
         if bool_question(msg):
             parser = FactoryParser()
