@@ -8,4 +8,4 @@ def test_import():
         from automail.cli import main
         assert True
     except (ImportError, ModuleNotFoundError):
-        assert False
+        raise AssertionError
