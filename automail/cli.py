@@ -57,18 +57,28 @@ def main():
                 with open(".coveragerc", "a+") as _f:
                     covignore = f"[run]\nomit = {env_dir}/*"
                     _f.write(covignore)
+            command_line = FIELDS["test_command"].split(" ") + ["--cov"] 
 
-            command = cmd.run(
-                FIELDS["test_command"].split(" ") + ["--cov"], stdout=cmd.PIPE
-            )
-            FIELDS["cov_output"] = command.stdout.decode()
-            FIELDS["tests_passing"] = not bool(command.returncode)
         else:
-            # run test command only
+            command_line = FIELDS["test_command"].split(" ")
+
+        # run the test command
+        try:
+            breakpoint()
+            devnull = open("nina.log", "w+")
             command = cmd.run(
-                FIELDS["test_command"].split(" "),
-                stdout=cmd.PIPE)
-            FIELDS["tests_passing"] = not bool(command.returncode)
+                command_line,
+                stdout=cmd.DEVNULL,
+                stderr=devnull)
+            cov_output = command.stdout.decode()
+            tests_passing = not bool(command.returncode)
+        except BaseException:
+            print(Fore.RED + "An error occurred when running test command, see nina.log")
+            cov_output = ""
+            tests_passing = False
+
+        FIELDS["cov_output"] = cov_output
+        FIELDS["tests_passing"] = tests_passing
 
     # generating files
     # license
