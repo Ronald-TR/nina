@@ -108,5 +108,6 @@ venv.bak/
 
 # personal
 README-autogen.md
+LICENSE-autogen.md
 setup-autogen.py
 nina-config.json
