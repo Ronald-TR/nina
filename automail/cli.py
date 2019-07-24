@@ -1,4 +1,5 @@
 import os
+import json
 import subprocess as cmd
 
 from pyfiglet import Figlet
@@ -30,7 +31,7 @@ def main():
 
     config_file = automail_config_file_question()
     suggestions = {}
-    # load the answer suggestions: by nina.json or git
+    # load the answer suggestions: by nina-config.json or git
     if config_file:
         for i in config_file:
             FIELDS[i] = config_file[i]
@@ -108,6 +109,12 @@ def main():
             message = f"{Style.BRIGHT}{Fore.BLACK}setup-autogen.py generated!"\
                 " Please revise them! :D"
             print(message)
+    
+    with open("nina-config.json", "w+") as _f:
+        _f.write(json.dumps(FIELDS))
+        message = f"{Style.BRIGHT}{Fore.BLACK}nina-config.json generated!"\
+            " Your previous answers are been preserved."
+        print(message)
 
 
 def _cli():
