@@ -53,7 +53,7 @@ def main():
             "You want to add coverage information? (for Pytest tests only)"
         )
         if answer:
-            # run tests with coverage
+            # prepare test command
             env_dir = get_env_dir()
             if not os.path.isfile(".coveragerc"):
                 with open(".coveragerc", "a+") as _f:
@@ -110,6 +110,7 @@ def main():
                 " Please revise them! :D"
             print(message)
 
+    # nina-config
     with open("nina-config.json", "w+") as _f:
         _f.write(json.dumps(FIELDS, indent=2))
         message = f"{Style.BRIGHT}{Fore.BLACK}nina-config.json generated!"\
