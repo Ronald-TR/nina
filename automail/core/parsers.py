@@ -36,12 +36,13 @@ class Parser:
         r = re.compile(r"^https://").match(self.repository_url)
         self.is_https = True if r else False
 
+        protocol = ""
         if self.is_ssh:
-            starts_with = "git@"
+            protocol = r"git@"
         if self.is_https:
-            starts_with = "https:\/\/"
+            protocol = r"https:\/\/"
 
-        _regex = starts_with + "(.*).com.(.*)\/(.*)\.git"
+        _regex = protocol + r"(.*).com.(.*)\/(.*)\.git"
         r = re.compile(_regex).match(self.repository_url)
         if r:
             self.gtype = r.groups()[0]
@@ -53,7 +54,7 @@ class FactoryParser:
     def __new__(cls, *args, **kwargs):
         git = cmd.run(
             ["git", "config", "-l"],
-            stdout=cmd.DEVNULL,
+            stdout=cmd.PIPE,
             stderr=cmd.DEVNULL)
         if git.returncode == 0:
             configs = git.stdout.decode().split("\n")
