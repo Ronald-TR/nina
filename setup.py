@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="nina",
-    version="v0.0.2",
+    version="v0.0.3",
     author="Ronald Rodrigues",
     author_email="ronald-farias@outlook.com",
     description="Generate README.md and setup.py quickly",
