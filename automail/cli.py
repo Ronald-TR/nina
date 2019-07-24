@@ -30,6 +30,7 @@ def main():
 
     config_file = automail_config_file_question()
     suggestions = {}
+    # load the answer suggestions: by nina.json or git
     if config_file:
         for i in config_file:
             FIELDS[i] = config_file[i]
@@ -64,7 +65,6 @@ def main():
 
         # run the test command
         try:
-            breakpoint()
             devnull = open("nina.log", "w+")
             command = cmd.run(
                 command_line,
