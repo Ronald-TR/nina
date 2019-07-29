@@ -1,4 +1,4 @@
 colorama==0.4.1
-inquirer==2.6.3
+PyInquirer==1.0.3
 pyfiglet==0.8.post1
 requests

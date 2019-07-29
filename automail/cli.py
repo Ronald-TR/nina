@@ -4,7 +4,7 @@ import subprocess as cmd
 
 from pyfiglet import Figlet
 from colorama import Fore, Style
-import inquirer
+import PyInquirer as inquirer
 
 from automail.core.helpers import (
     bool_question,

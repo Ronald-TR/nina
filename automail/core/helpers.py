@@ -4,8 +4,7 @@ import subprocess
 import requests
 from datetime import datetime
 
-from colorama import Fore, Style
-import inquirer
+import PyInquirer as inquirer
 
 from automail.core.parsers import FactoryParser
 
@@ -65,10 +64,11 @@ def inquirer_questions(fields, suggestions, skip=list()[:]):
 
         if k == "license_type":
             questions += [
-                inquirer.List(
-                    k,
-                    message="What's the License Type?",
-                    choices=[
+                {
+                    "type": "list",
+                    "name": k,
+                    "message": "What's the License Type?",
+                    "choices": [
                         "MIT",
                         "GNU AGPLv3",
                         "GNU GPLv3",
@@ -76,19 +76,20 @@ def inquirer_questions(fields, suggestions, skip=list()[:]):
                         "Unlicense",
                         "Apache 2.0",
                         "Mozilla Public License 2.0",
-                    ],
-                )
+                    ]
+                }
             ]
             continue
 
         msg = "What's the " + " ".join(k.split("_")).title() + "?"
         sg = suggestions.get(k) or ""
         questions += [
-            inquirer.Text(
-                name=k,
-                message=Style.BRIGHT + Fore.YELLOW + msg,
-                default=Fore.LIGHTBLACK_EX + sg,
-            )
+            {
+                "type": "input",
+                "name": k,
+                "message": msg,
+                "default": sg
+            }
         ]
 
     return questions
@@ -123,11 +124,12 @@ def suggestions_by(_dict, parser=None):
 
 def bool_question(question):
     question = [
-        inquirer.List(
-            "question",
-            message=f"{Fore.LIGHTWHITE_EX}{question}",
-            choices=["YES", "NO"]
-        )
+        {
+            "name": "question",
+            "type": "list",
+            "message": question,
+            "choices": ["YES", "NO"]
+        }
     ]
     answer = inquirer.prompt(question)
     if not answer:
