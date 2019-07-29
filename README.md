@@ -1,13 +1,16 @@
 
 # nina
 
-![version](https://img.shields.io/badge/nina-v0.0.3-brightgreen.svg) ![coverage](https://img.shields.io/badge/coverage-21%25-yellow.svg) ![tests](https://img.shields.io/badge/tests-passing-green.svg) ![license](https://img.shields.io/badge/license-MIT-green.svg)
+![version](https://img.shields.io/badge/nina-v0.0.4-brightgreen.svg) ![coverage](https://img.shields.io/badge/coverage-21%25-yellow.svg) ![tests](https://img.shields.io/badge/tests-passing-green.svg) ![license](https://img.shields.io/badge/license-MIT-green.svg)
 
 ## :house: [Homepage](https://nina.github.io/)
 Generate README.md and setup.py quickly!
 Nina is a cli program that will helps you on generating readmes, licenses and setup.py answering some questions.
 
 And... the first version of this readme was maded with **nina** :)
+## Version Notes
+
+* nina v0.0.4 has multiplatform support.
 ## Installation
 
     pip install nina
